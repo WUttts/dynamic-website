@@ -1,0 +1,68 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Home Page</title>
+		<meta name="description" content="form to add new books">
+		<meta name="author" content="Mark Tyers">
+		<link href="/style.css" type="text/css" rel="stylesheet" />
+		<script type="module" src="/main.js"></script>
+    <style>
+      .content{
+        padding: 15px;
+      }
+      .content .content-item{
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+      .content .content-item:nth-child(2n + 1){
+        background: #f7f7f7;
+      }
+      .content .content-item:nth-child(2n){
+        text-align: right;
+      }
+      .content .content-item .title{
+        color: #333333;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .content .content-item .subtitle{
+        color: dimgray;
+        font-size: 14px;
+        margin-top: 30px;
+      }
+    </style>
+	</head>
+	<body>
+		<header class="top">
+			<h1>Home</h1>
+			{{#if authorised}}
+				<a href="/logout">Log out</a>
+			{{else}}
+				<a href="/login">Log in</a>
+			{{/if}}
+		</header>
+    <main class="main">
+      <div class="menu">
+        {{#if authorised}}
+        <div class="menu-item">
+            <a href="/">Home</a>
+            <span>></span>
+          </div>
+          <div class="menu-item">
+            <a href="/foo">Foo Bar</a>
+            <span>></span>
+          </div>
+          <div class="menu-item">
+            <a href="/photos">Photos Bar</a>
+            <span>></span>
+          </div>
+        {{/if}}
+      </div>
+      {{> quotes/index }}
+    </main>
+	</body>
+</html>

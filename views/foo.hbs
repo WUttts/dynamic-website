@@ -1,0 +1,126 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Foo Page</title>
+  <meta name="description" content="form to add new books">
+  <meta name="author" content="Mark Tyers">
+  <link href="/style.css" type="text/css" rel="stylesheet" />
+  <script type="module" src="/main.js"></script>
+  <style>
+    .content {
+      padding: 15px;
+    }
+
+    .form-box {}
+
+    .form-box .form-item {
+      margin-bottom: 30px;
+    }
+
+    .form-box .form-item label {
+      color: dimgray;
+      font-size: 12px;
+    }
+
+    .form-item input {
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      width: 200px;
+      outline: 0px;
+      width: 400px;
+    }
+
+    .file label {
+      color: dimgray;
+      font-size: 12px;
+    }
+
+    .sub {
+      margin-top: 30px;
+    }
+
+    .sub button {
+      border: none;
+      background: #409EFF;
+      color: #ffffff;
+      padding: 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <h1>Foo Bar</h1>
+    {{#if authorised}}
+    <a href="/logout">Log out</a>
+    {{else}}
+    <a href="/login">Log in</a>
+    {{/if}}
+  </header>
+  <main class="main">
+    <div class="menu">
+      {{#if authorised}}
+      <div class="menu-item">
+        <a href="/">Home</a>
+        <span>></span>
+      </div>
+      <div class="menu-item">
+        <a href="/foo">Foo Bar</a>
+        <span>></span>
+      </div>
+      <div class="menu-item">
+        <a href="/photos">Photos Bar</a>
+        <span>></span>
+      </div>
+      {{/if}}
+    </div>
+    <div class="content">
+      {{> upload }}
+    </div>
+  </main>
+  <script type="text/javascript">
+
+    async function upload() {
+      const file = document.querySelector('input[name="file"]').files[0]
+      file.base64 = await file2DataURI(file)
+      file.user = 'doej'
+      file.tag = document.querySelector('input[name="tag"]').value ?? 'default'
+      file.category = document.querySelector('input[name="category"]').value ?? 'default'
+      console.log(file)
+      const url = '/api/files'
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/vnd.api+json',
+            'Authorization': localStorage.getItem('authorization')
+        },
+        body: JSON.stringify(file)
+    }
+    const response = await fetch(url, options)
+    console.log(response)
+    const json = await response.json()
+    console.log(json)
+    }
+
+    function file2DataURI(file) {
+      return new Promise((resolve, reject) => {
+        try {
+          const reader = new FileReader()
+          reader.onload = () => {
+            resolve(reader.result)
+          }
+          reader.readAsDataURL(file)
+        } catch (err) {
+          reject(err)
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>
